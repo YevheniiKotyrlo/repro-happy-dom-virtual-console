@@ -2,7 +2,7 @@ name: Type Check
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix]
   pull_request:
     branches: [main]
 
@@ -16,6 +16,9 @@ jobs:
         with:
           node-version: 22
       - run: cd test-node && npm install
+      - name: Apply fix (fix branch only)
+        if: github.ref == 'refs/heads/fix'
+        run: bash apply-fix.sh
       - run: cd test-node && npx tsc --noEmit
 
   typecheck-bun:
@@ -27,6 +30,9 @@ jobs:
         with:
           node-version: 22
       - run: cd test-bun && npm install
+      - name: Apply fix (fix branch only)
+        if: github.ref == 'refs/heads/fix'
+        run: bash apply-fix.sh
       - run: cd test-bun && npx tsc --noEmit
 
   typecheck-dom:
@@ -38,4 +44,7 @@ jobs:
         with:
           node-version: 22
       - run: cd test-deno && npm install
+      - name: Apply fix (fix branch only)
+        if: github.ref == 'refs/heads/fix'
+        run: bash apply-fix.sh
       - run: cd test-deno && npx tsc --noEmit
