@@ -29,12 +29,25 @@ All tests use `skipLibCheck: false` to trigger type checking of happy-dom's `.d.
 | Bun + bun-types | FAIL (TS2305 + TS2420) | PASS |
 | Browser (lib.dom) | FAIL (TS2305) | PASS |
 
-## The patch
+## The fix
 
-The patch in `patches/happy-dom@20.8.3.patch` applies two changes to `VirtualConsole.d.ts`:
+The patch introduces a custom `IVirtualConsole` interface owned by happy-dom, replacing all `Console` type annotations:
 
-1. **Remove `implements Console`** — decouples VirtualConsole from the consumer's Console definition
-2. **Replace `ConsoleConstructor` import with `Console['Console']`** — avoids importing from the `console` module (already merged upstream as [PR #2095](https://github.com/capricorn86/happy-dom/pull/2095), but not yet released in 20.8.3)
+1. **New `IVirtualConsole` interface** — contains all standard console methods with VirtualConsole's actual signatures
+2. **`VirtualConsole implements IVirtualConsole`** instead of `implements Console`
+3. **All `Console` type annotations** in BrowserWindow, BrowserPage, Browser, etc. changed to `IVirtualConsole`
+4. **`ConsoleConstructor` import replaced** (already merged upstream as [PR #2095](https://github.com/capricorn86/happy-dom/pull/2095), not yet released in 20.8.3)
+
+This works because `Console` (any runtime) is a superset of `IVirtualConsole` — `globalThis.console` remains assignable to `IVirtualConsole` in all environments.
+
+## Test coverage
+
+Each test file validates:
+- `import type { IVirtualConsole } from 'happy-dom'` — type import works
+- `new Window({ console: globalThis.console })` — native console passthrough works
+- `const c: IVirtualConsole = window.console` — Window API usage works
+- `const c: IVirtualConsole = globalThis.console` — native console assignability works
+- `const c: IVirtualConsole = new VirtualConsole(printer)` — direct construction works
 
 ## Structure
 
@@ -44,5 +57,3 @@ test-bun/     — Bun + bun-types
 test-deno/    — Browser-like (lib.dom)
 patches/      — Unified diff patch for happy-dom@20.8.3
 ```
-
-Each directory has the same `index.mts` test file that imports VirtualConsole and uses the Window API.

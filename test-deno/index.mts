@@ -1,10 +1,13 @@
-// Test: Import VirtualConsole type (triggers TS2420 on unpatched happy-dom in Bun)
-import type VirtualConsole from 'happy-dom/lib/console/VirtualConsole.js';
-export type { VirtualConsole };
-
-// Test: Use Window class — the main consumer API
+// Test: Import IVirtualConsole type
+import type { IVirtualConsole } from 'happy-dom';
 import { Window } from 'happy-dom';
 
+// Test: Use Window API
 const window = new Window();
-window.console.log('test');
+const console: IVirtualConsole = window.console;
+console.log('test');
 window.close();
+
+// Test: globalThis.console assignable to IVirtualConsole
+const nativeConsole: IVirtualConsole = globalThis.console;
+nativeConsole.log('native');
