@@ -48,3 +48,16 @@ jobs:
         if: github.ref == 'refs/heads/fix'
         run: patch -p1 -d test-deno/node_modules/happy-dom < patches/happy-dom@20.8.3.patch
       - run: cd test-deno && npx tsc --noEmit
+
+  typecheck-assignability:
+    name: IVirtualConsole assignability (fix only)
+    if: github.ref == 'refs/heads/fix'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: cd test-assignability && npm install
+      - run: patch -p1 -d test-assignability/node_modules/happy-dom < patches/happy-dom@20.8.3.patch
+      - run: cd test-assignability && npx tsc --noEmit
