@@ -1,0 +1,18 @@
+diff --git a/lib/console/VirtualConsole.d.ts b/lib/console/VirtualConsole.d.ts
+index 1234567..abcdefg 100644
+--- a/lib/console/VirtualConsole.d.ts
++++ b/lib/console/VirtualConsole.d.ts
+@@ -1,10 +1,9 @@
+ import type IVirtualConsolePrinter from './IVirtualConsolePrinter.js';
+-import type { ConsoleConstructor } from 'console';
+ /**
+  * Virtual Console.
+  *
+  * @see https://developer.mozilla.org/en-US/docs/Web/API/Console
+  */
+-export default class VirtualConsole implements Console {
++export default class VirtualConsole {
+     #private;
+-    Console: ConsoleConstructor;
++    Console: Console['Console'];
+     /**

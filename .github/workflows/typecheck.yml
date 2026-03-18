@@ -18,7 +18,7 @@ jobs:
       - run: cd test-node && npm install
       - name: Apply fix (fix branch only)
         if: github.ref == 'refs/heads/fix'
-        run: bash apply-fix.sh
+        run: patch -p1 -d test-node/node_modules/happy-dom < patches/happy-dom@20.8.3.patch
       - run: cd test-node && npx tsc --noEmit
 
   typecheck-bun:
@@ -32,7 +32,7 @@ jobs:
       - run: cd test-bun && npm install
       - name: Apply fix (fix branch only)
         if: github.ref == 'refs/heads/fix'
-        run: bash apply-fix.sh
+        run: patch -p1 -d test-bun/node_modules/happy-dom < patches/happy-dom@20.8.3.patch
       - run: cd test-bun && npx tsc --noEmit
 
   typecheck-dom:
@@ -46,5 +46,5 @@ jobs:
       - run: cd test-deno && npm install
       - name: Apply fix (fix branch only)
         if: github.ref == 'refs/heads/fix'
-        run: bash apply-fix.sh
+        run: patch -p1 -d test-deno/node_modules/happy-dom < patches/happy-dom@20.8.3.patch
       - run: cd test-deno && npx tsc --noEmit
