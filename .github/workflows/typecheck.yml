@@ -1,0 +1,41 @@
+name: Type Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  typecheck-node:
+    name: Node.js + @types/node
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: cd test-node && npm install
+      - run: cd test-node && npx tsc --noEmit
+
+  typecheck-bun:
+    name: Bun + bun-types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: cd test-bun && npm install
+      - run: cd test-bun && npx tsc --noEmit
+
+  typecheck-dom:
+    name: Browser (lib.dom)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: cd test-deno && npm install
+      - run: cd test-deno && npx tsc --noEmit

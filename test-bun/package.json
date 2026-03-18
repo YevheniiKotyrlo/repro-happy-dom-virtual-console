@@ -1,0 +1,11 @@
+{
+  "name": "test-happy-dom-bun",
+  "private": true,
+  "dependencies": {
+    "happy-dom": "20.8.3",
+    "typescript": "5.8.3"
+  },
+  "devDependencies": {
+    "bun-types": "1.3.10"
+  }
+}

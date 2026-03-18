@@ -1,0 +1,11 @@
+{
+  "name": "test-happy-dom-node",
+  "private": true,
+  "dependencies": {
+    "happy-dom": "20.8.3",
+    "typescript": "5.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.3"
+  }
+}
